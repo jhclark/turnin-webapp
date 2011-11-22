@@ -16,9 +16,14 @@ object Receipts {
     val md5all = "md5sum %s".format(file) !!
     val md5 = md5all.trim.split("""\s+""")(0)
     val time = new Date
+    System.err.println("Date: " + time.getTime)
+    val strTime = (time.getTime - DATE_CONST).toString
+    assert(strTime.length >= 3, "time too short")
+    System.err.println("Date str: " + strTime)
+
     // Only use a few digits of the MD5 to keep the receipt length managable
-    // Use a random character to prevent reverse engineering of the key via the MD5 hash
-    val str = rand.nextPrintableChar + md5.slice(0,4) + (time.getTime-DATE_CONST)
+    val str = Seq(md5(0), strTime(0), md5(1), strTime(1), md5(2), strTime(2), md5(3), strTime.substring(3)).mkString("")
+    //val str = rand.nextPrintableChar + md5.slice(0,4) + strTime
 
     System.err.println("Plaintext receipt: " + str)
 
@@ -55,11 +60,16 @@ object Receipts {
 
     val original = decipher.doFinal(bytes)
     val originalStr = new String(original)
+    System.err.println("Plaintext receipt: " + originalStr)
 
     // first character is random garbage
-    val md5 = originalStr.slice(1,5)
-    val dateStr = originalStr.substring(5)
+    val md5 = Seq(originalStr(0), originalStr(2), originalStr(4), originalStr(6)).mkString("")
+    val dateStr = Seq(originalStr(1), originalStr(3), originalStr(5), originalStr.substring(7)).mkString("")
+    System.err.println("Date str: " + dateStr)
+    //val md5 = originalStr.slice(1,5)
+    //val dateStr = originalStr.substring(5)
     val date = new Date(java.lang.Long.parseLong(dateStr) + DATE_CONST)
+    System.err.println("Date: " + date.getTime)
     (md5, date)
   }
 
