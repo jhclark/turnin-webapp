@@ -74,7 +74,6 @@ Future Features
 ===============
 
 * Protection against bots
-* Logging all receipts to a central file
 
 
 References
