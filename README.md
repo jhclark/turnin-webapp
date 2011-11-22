@@ -15,7 +15,7 @@ Features:
 * Built-in cryptographic receipt system to verify student turn-in claims (in case there is a discrepancy between the file on-disk and a file the student claims to have submitted)
 * Tracks multiple submissions
 
-The most recent version of files submitted are kept in data/uploads. The entire history of files submitted by students is kept in data/uploads/all.
+The most recent version of files submitted are kept in data/uploads. The entire history of files submitted by students is kept in data/uploads/all. All generated receipts are logged to data/receipts.log.
 
 Building and Running the WebApp
 ===============================
@@ -32,13 +32,19 @@ You'll need Scala 2.9.1+ installed. You probably want to run this as a special u
 Configuration
 =============
 
-TODO
+Edit data/turnin.conf
+
+You can configure which files should be expected in the submission by editing data/manifest.txt
+
+You can change the logo by replacing webapps/turnin/logo.png
 
 Working with Receipts
 =====================
 
 Generating an Encryption Key for Turnin Receipts
 ------------------------------------------------
+
+You'll need to generate a unique secret key, which will be used to generate recepts. Make sure to keep this secret from the people who you will be giving receipts to.
 
 ```
 ./keygen.sh key.bin
