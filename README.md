@@ -10,6 +10,7 @@ Overview
 A tool for instructors that allows students to submit .tgz files using a web interface.
 
 Features:
+
 * Dead simple web-interface
 * Minimal configuration
 * Built-in cryptographic receipt system to verify student turn-in claims (in case there is a discrepancy between the file on-disk and a file the student claims to have submitted)
