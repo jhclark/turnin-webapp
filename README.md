@@ -41,7 +41,7 @@ Generating an Encryption Key for Turnin Receipts
 ------------------------------------------------
 
 ```
-scala -cp target/scala_2.9.0-1/classes KeyGen key.bin
+./keygen.sh key.bin
 ```
 
 Verifying the Time and MD5 Checksum of a Submission
@@ -51,7 +51,7 @@ Given the receipt (e.g. a362b2bf7cd6dc646e7fabc478208752), you can verify the ti
 If the student also provides the file they claim to have submitted, you can also verify the file's contents.
 
 ```
-scala -cp target/scala_2.9.0-1/classes View key.bin a362b2bf7cd6dc646e7fabc478208752
+./view.sh key.bin a362b2bf7cd6dc646e7fabc478208752
 md5sum file_student_claims_submitted.tar.gz
 ```
 
@@ -60,6 +60,15 @@ Checking for Stolen Receipts
 
 If a student claims the receipt of another student, you can verify this by grepping through the file "receipts.log",
 which records all issued receipts.
+
+Manually Generating a Receipt
+-----------------------------
+
+You should never need to do this manually since the webapp does this for you. But just in case:
+
+```bash
+./generate.sh data/key.bin start.jar
+```
 
 Future Features
 ===============
