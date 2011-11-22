@@ -6,16 +6,19 @@ import javax.crypto.spec._
 import java.io._
 import java.util._
 import sys.process._
+import util.Random
 
 object Receipts {
   val DATE_CONST = 1319722893834L // make dates smaller (relative to a different date than 1970)
+  val rand = new Random((new Date).getTime)
 
   def generate(file: String, keyFile: String): String = {
     val md5all = "md5sum %s".format(file) !!
     val md5 = md5all.trim.split("""\s+""")(0)
-    val time = new Date()
+    val time = new Date
     // Only use a few digits of the MD5 to keep the receipt length managable
-    val str = md5.slice(0,4) + (time.getTime-DATE_CONST)
+    // Use a random character to prevent reverse engineering of the key via the MD5 hash
+    val str = rand.nextPrintableChar + md5.slice(0,4) + (time.getTime-DATE_CONST)
 
     System.err.println("Plaintext receipt: " + str)
 
@@ -53,8 +56,9 @@ object Receipts {
     val original = decipher.doFinal(bytes)
     val originalStr = new String(original)
 
-    val md5 = originalStr.slice(0,4)
-    val dateStr = originalStr.substring(4)
+    // first character is random garbage
+    val md5 = originalStr.slice(1,5)
+    val dateStr = originalStr.substring(5)
     val date = new Date(java.lang.Long.parseLong(dateStr) + DATE_CONST)
     (md5, date)
   }
