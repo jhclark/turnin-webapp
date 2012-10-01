@@ -52,7 +52,11 @@ object Files {
   }
 
   def copy(src: File, dest: File) {
-    dest.createNewFile
+    try {
+      dest.createNewFile
+    } catch {
+      case e: IOException => throw new RuntimeException("Could not create file: " + dest.getAbsolutePath, e)
+    }
     new FileOutputStream(dest).getChannel.transferFrom(new FileInputStream(src).getChannel, 0, Long.MaxValue)
   }
 }
@@ -78,6 +82,9 @@ class TurninWebApp extends ScalatraFilter with ScalateSupport with FileUploadSup
   val manifestFile = conf("manifestFile")
   val pageTitle = conf("pageTitle")
 
+  if(!new File(uploadDir).exists) {
+    throw new RuntimeException("Upload directory not found: %s".format(new File(uploadDir).getAbsolutePath))
+  }
   if(!new File(keyFile).exists) {
     throw new RuntimeException("File not found: %s".format(new File(keyFile).getAbsolutePath))
   }
@@ -123,7 +130,11 @@ class TurninWebApp extends ScalatraFilter with ScalateSupport with FileUploadSup
     val time: String = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date)
     
     val file = new File(uploadDir, "%s.tar.gz".format(realName)).getAbsoluteFile
-    val bakFile = new File(uploadDir, "all/%s-%s.tar.gz".format(realName,time)).getAbsoluteFile
+    val allDir = new File(uploadDir, "all")
+    if (!allDir.exists) {
+      allDir.mkdir
+    }
+    val bakFile = new File(allDir, "%s-%s.tar.gz".format(realName,time)).getAbsoluteFile
     println("Receiving upload to: %s".format(file))
     fileItem.write(file)
     println("Making backup to: %s".format(bakFile))
