@@ -4,6 +4,7 @@ Turnin Webapp
 Written By Jonathan Clark 2011
 For 11-711 at Carnegie Mellon University
 
+
 Overview
 ========
 
@@ -18,6 +19,7 @@ Features:
 
 The most recent version of files submitted are kept in data/uploads. The entire history of files submitted by students is kept in data/uploads/all. All generated receipts are logged to data/receipts.log.
 
+
 Building and Running the WebApp
 ===============================
 
@@ -30,6 +32,9 @@ You'll need Scala 2.9.1+ installed. You probably want to run this as a special u
 ./run.sh
 ```
 
+Now have a look at your turnin server running at http://localhost:8081
+
+
 Configuration
 =============
 
@@ -38,6 +43,7 @@ Edit data/turnin.conf
 You can configure which files should be expected in the submission by editing data/manifest.txt
 
 You can change the logo by replacing webapps/turnin/logo.png
+
 
 Working with Receipts
 =====================
